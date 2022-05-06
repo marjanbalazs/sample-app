@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "compile": "lerna run compile --stream",
     "dev": "lerna run dev --stream",
     "build": "lerna run build",
     "test": "echo \"Error: no test specified\" && exit 1"

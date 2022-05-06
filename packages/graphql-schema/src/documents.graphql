@@ -13,11 +13,10 @@ query getCollection($name: String!) {
 
 query getTask($collectionName: String!, $taskId: String!) {
     getTask(collectionName: $collectionName, taskId: $taskId) {
-            id
-            tags
-            name
-            complete
-        }
+        id
+        tags
+        name
+        complete 
     }
 }
 
