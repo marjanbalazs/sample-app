@@ -1,5 +1,6 @@
 import { ApolloError } from "apollo-server-express";
-import { Collection, Db, Document, Logger, ObjectId, WithId } from "mongodb";
+import type { Logger } from "log4js";
+import { Db, Document, ObjectId, WithId } from "mongodb";
 import {
   MutationResolvers,
   QueryResolvers,
@@ -8,6 +9,7 @@ import {
 
 type Context = {
   db: Db;
+  logger: Logger;
 };
 
 const mapDocumentToTask = (dbTask: WithId<Document>): Task => {
@@ -21,72 +23,87 @@ const mapDocumentToTask = (dbTask: WithId<Document>): Task => {
 export const getCollections: QueryResolvers<Context>["getCollections"] = async (
   parent,
   args,
-  { db }
+  { db, logger }
 ) => {
-  const collections = await db
-    .listCollections(
-      {},
-      {
-        nameOnly: true,
-      }
-    )
-    .toArray();
-  return collections.map((collection) => collection.name);
+  try {
+    const collections = await db
+      .listCollections(
+        {},
+        {
+          nameOnly: true,
+        }
+      )
+      .toArray();
+    return collections.map((collection) => collection.name);
+  } catch (e) {
+    logger.error(e);
+    throw e;
+  }
 };
 
 export const getCollection: QueryResolvers<Context>["getCollection"] = async (
   parent,
   { name },
-  { db }
+  { db, logger }
 ) => {
-  const collections = await db.collections();
-  const ourCollection = collections.find(
-    (collection) => collection.collectionName === name
-  );
-  if (ourCollection) {
-    const tasks = (await ourCollection.find({}).toArray()).map(
-      mapDocumentToTask
+  try {
+    const collections = await db.collections();
+    const ourCollection = collections.find(
+      (collection) => collection.collectionName === name
     );
-    return {
-      id: ourCollection.collectionName,
-      name: ourCollection.collectionName,
-      tasks: tasks,
-    };
-  } else {
-    throw new ApolloError("No collection found");
+    if (ourCollection) {
+      const tasks = (await ourCollection.find({}).toArray()).map(
+        mapDocumentToTask
+      );
+      return {
+        id: ourCollection.collectionName,
+        name: ourCollection.collectionName,
+        tasks: tasks,
+      };
+    } else {
+      throw new ApolloError("No collection found");
+    }
+  } catch (e) {
+    logger.error(e);
+    throw e;
   }
 };
 
 export const getTask: QueryResolvers<Context>["getTask"] = async (
   parent,
   { collectionName, taskId },
-  { db }
+  { db, logger }
 ) => {
-  const collections = await db.collections();
-  const ourCollection = collections.find(
-    (collection) => collection.collectionName === collectionName
-  );
-  if (ourCollection) {
-    const task = await ourCollection.findOne({
-      _id: new ObjectId(taskId),
-    });
-    if (task) {
-      return mapDocumentToTask(task);
+  try {
+    const collections = await db.collections();
+    const ourCollection = collections.find(
+      (collection) => collection.collectionName === collectionName
+    );
+    if (ourCollection) {
+      const task = await ourCollection.findOne({
+        _id: new ObjectId(taskId),
+      });
+      if (task) {
+        return mapDocumentToTask(task);
+      } else {
+        throw new ApolloError("No task found");
+      }
     } else {
-      throw new ApolloError("No task found");
+      throw new ApolloError("No collection found");
     }
-  } else {
-    throw new ApolloError("No collection found");
+  } catch (e) {
+    logger.error(e);
+    throw e;
   }
 };
 
 export const createCollection: MutationResolvers<Context>["createCollection"] =
-  async (parent, { collectionName }, { db }) => {
+  async (parent, { collectionName }, { db, logger }) => {
     try {
       await db.createCollection(collectionName);
       return collectionName;
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       throw e;
     }
   };
@@ -94,7 +111,7 @@ export const createCollection: MutationResolvers<Context>["createCollection"] =
 export const createTask: MutationResolvers<Context>["createTask"] = async (
   parent,
   { collectionName, input },
-  { db }
+  { db, logger }
 ) => {
   try {
     const collection = db.collection<{ name: string; tags?: string[] | null }>(
@@ -110,7 +127,7 @@ export const createTask: MutationResolvers<Context>["createTask"] = async (
       tags: input.tags,
     };
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     throw e;
   }
 };
@@ -118,7 +135,7 @@ export const createTask: MutationResolvers<Context>["createTask"] = async (
 export const updateTask: MutationResolvers<Context>["updateTask"] = async (
   parent,
   { collectionName, taskId, input },
-  { db }
+  { db, logger }
 ) => {
   try {
     const collection = db.collection(collectionName);
@@ -140,7 +157,7 @@ export const updateTask: MutationResolvers<Context>["updateTask"] = async (
     }
     return mapDocumentToTask(updatedDoc.value);
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     throw e;
   }
 };
@@ -148,14 +165,19 @@ export const updateTask: MutationResolvers<Context>["updateTask"] = async (
 export const deleteTask: MutationResolvers<Context>["deleteTask"] = async (
   parent,
   { collectionName, taskId },
-  { db }
+  { db, logger }
 ) => {
-  const collection = db.collection<Task>(collectionName);
-  const deleteResult = await collection.findOneAndDelete({
-    _id: new ObjectId(taskId),
-  });
-  if (deleteResult.ok) {
-    return true;
+  try {
+    const collection = db.collection<Task>(collectionName);
+    const deleteResult = await collection.findOneAndDelete({
+      _id: new ObjectId(taskId),
+    });
+    if (deleteResult.ok) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    logger.error(e);
+    throw e;
   }
-  return false;
 };

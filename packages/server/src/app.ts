@@ -9,9 +9,10 @@ import {
   createCollection,
   createTask,
   updateTask,
-  deleteTask
+  deleteTask,
 } from "./resolvers";
 import fs from "fs";
+import { logger } from "./utils";
 
 const typedefs = fs
   .readFileSync("node_modules/sample-app-graphql-schema/src/schema.graphql")
@@ -32,12 +33,11 @@ const init = async (
   server: ApolloServer;
   app: Express;
 }> => {
-  // Use connect method to connect to the server
   await client.connect();
-  console.log("Connected successfully to server");
+  logger.debug("Connected successfully to server");
   const db = client.db(dbName);
 
-  console.log("Initializing Apollo Middleware");
+  logger.debug("Initializing Apollo Middleware");
   const resolvers: Resolvers = {
     Query: {
       getCollections,
@@ -56,6 +56,7 @@ const init = async (
     resolvers: resolvers,
     context: {
       db,
+      logger: logger,
     },
   });
   await server.start();
@@ -78,6 +79,6 @@ init(client, app)
       path: "/graphql",
     });
     app.use(middleware);
-    app.listen(3000, () => console.log("Server started"));
+    app.listen(3000, () => logger.debug("Server started"));
   })
-  .catch((e) => console.error(e));
+  .catch((e) => logger.error(e));

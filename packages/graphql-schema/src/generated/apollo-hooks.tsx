@@ -91,6 +91,58 @@ export type TaskUpdateInput = {
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type GetCollectionQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetCollectionQuery = { __typename?: 'Query', getCollection?: { __typename?: 'Collection', id: string, name: string, tasks?: Array<{ __typename?: 'Task', id: string, tags?: Array<string> | null | undefined, name: string, complete?: boolean | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+
+export type GetTaskQueryVariables = Exact<{
+  collectionName: Scalars['String'];
+  taskId: Scalars['String'];
+}>;
+
+
+export type GetTaskQuery = { __typename?: 'Query', getTask?: { __typename?: 'Task', id: string, tags?: Array<string> | null | undefined, name: string, complete?: boolean | null | undefined } | null | undefined };
+
+export type GetCollectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCollectionsQuery = { __typename?: 'Query', getCollections?: Array<string | null | undefined> | null | undefined };
+
+export type CreateCollectionMutationVariables = Exact<{
+  collectionName: Scalars['String'];
+}>;
+
+
+export type CreateCollectionMutation = { __typename?: 'Mutation', createCollection?: string | null | undefined };
+
+export type CreateTaskMutationVariables = Exact<{
+  collectionName: Scalars['String'];
+  input: TaskCreateInput;
+}>;
+
+
+export type CreateTaskMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'Task', id: string, tags?: Array<string> | null | undefined, name: string, complete?: boolean | null | undefined } | null | undefined };
+
+export type UpdateTaskMutationVariables = Exact<{
+  collectionName: Scalars['String'];
+  taskId: Scalars['String'];
+  input: TaskUpdateInput;
+}>;
+
+
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'Task', id: string, tags?: Array<string> | null | undefined, name: string, complete?: boolean | null | undefined } | null | undefined };
+
+export type DeleteTaskMutationVariables = Exact<{
+  collectionName: Scalars['String'];
+  taskId: Scalars['String'];
+}>;
+
+
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: boolean | null | undefined };
+
 
 export const GetCollectionDocument = gql`
     query getCollection($name: String!) {

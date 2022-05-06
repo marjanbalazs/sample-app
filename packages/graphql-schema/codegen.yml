@@ -5,7 +5,12 @@ generates:
   src/generated/apollo-hooks.tsx:
     plugins:
       - "typescript"
+      - "typescript-operations"
       - "typescript-react-apollo"
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
   src/generated/resolver-types.ts:
     plugins:
       - "typescript"
