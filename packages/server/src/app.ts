@@ -11,7 +11,7 @@ app.get("/hello", (req, res) => {
 // import { MongoClient } from 'mongodb'
 
 // Connection URL
-const url = "mongodb://mongodb:27017";
+const url = "mongodb://localhost:27017";
 const client = new MongoClient(url);
 
 // Database Name
