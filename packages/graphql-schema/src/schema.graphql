@@ -1,0 +1,36 @@
+type Task {
+    id: String!
+    tags: [String!]
+    name: String!
+    complete: Boolean
+}
+
+type Collection {
+    id: String!
+    name: String!
+    tasks: [Task]
+}
+
+input TaskCreateInput {
+    name: String!
+    tags: [String!]
+}
+
+input TaskUpdateInput {
+    name: String
+    complete: Boolean
+    tags: [String!]
+}
+
+query {
+    getCollection(name: String!): Collection
+    getTask(collectionName: String!, taskId: String!): Task
+    getCollections(): [String]
+}
+
+mutation {
+    createCollection(collectionName: String!): String
+    createTask(collectionName: String!, input: TaskCreateInput!): Task
+    updateTask(collectionName: String!, taskId: String!, input: TaskUpdateInput!): Task
+    deleteTask(collectionName: String!, taskId: String!): Boolean
+}
