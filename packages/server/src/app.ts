@@ -2,7 +2,15 @@ import express, { Express } from "express";
 import { Db, MongoClient } from "mongodb";
 import { ApolloServer } from "apollo-server-express";
 import { Resolvers } from "sample-app-graphql-schema/src/generated/resolver-types";
-import { getCollections } from "./resolvers";
+import {
+  getCollections,
+  getCollection,
+  getTask,
+  createCollection,
+  createTask,
+  updateTask,
+  deleteTask
+} from "./resolvers";
 import fs from "fs";
 
 const typedefs = fs
@@ -33,6 +41,14 @@ const init = async (
   const resolvers: Resolvers = {
     Query: {
       getCollections,
+      getCollection,
+      getTask,
+    },
+    Mutation: {
+      createCollection,
+      createTask,
+      updateTask,
+      deleteTask,
     },
   };
   const server = new ApolloServer({
