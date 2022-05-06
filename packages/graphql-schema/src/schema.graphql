@@ -22,13 +22,13 @@ input TaskUpdateInput {
     tags: [String!]
 }
 
-extend type Query {
+type Query {
     getCollection(name: String!): Collection
     getTask(collectionName: String!, taskId: String!): Task
     getCollections: [String]
 }
 
-extend type Mutation {
+type Mutation {
     createCollection(collectionName: String!): String
     createTask(collectionName: String!, input: TaskCreateInput!): Task
     updateTask(collectionName: String!, taskId: String!, input: TaskUpdateInput!): Task
