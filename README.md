@@ -19,6 +19,7 @@ Navigate to http://localhost:8000 in the browser
   * Serve the client with nginx
   * Pass the backend url to the client
   * Set up environment variable handling with dotenv for the backend
+* Dev setup breaks when using the browser navigation, I think the esbuild server tries to match the url instead of just serving the index.html
 * Handle errors on the frontend
 * Add tracing to calls (transaction IDs for graphql requests, log failed transaction IDs on backend, pass back to frontend)
 * Actually finish the abandoned local docker compose setup
