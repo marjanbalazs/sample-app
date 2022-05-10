@@ -12,7 +12,7 @@ import {
   deleteTask,
 } from "./resolvers";
 import { logger } from "./utils";
-import typedefs from "../generated/schema.txt";
+import typedefs from "../generated/schema.graphql";
 
 // Connection URL
 const url = "mongodb://localhost:27017";

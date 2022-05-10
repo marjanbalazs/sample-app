@@ -9,7 +9,7 @@ esbuild
     bundle: true,
     platform: "node",
     loader: {
-      ".graphql": "file",
+      ".graphql": "text",
     },
   })
   .then(() => console.log("Server built!"))
