@@ -1,16 +1,7 @@
 import express, { Express } from "express";
 import { Db, MongoClient } from "mongodb";
 import { ApolloServer } from "apollo-server-express";
-import { Resolvers } from "./../generated/resolver-types";
-import {
-  getCollections,
-  getCollection,
-  getTask,
-  createCollection,
-  createTask,
-  updateTask,
-  deleteTask,
-} from "./resolvers";
+import { resolvers } from "./resolvers";
 import { logger } from "./utils";
 import typedefs from "../generated/schema.graphql";
 
@@ -34,19 +25,6 @@ const init = async (
   const db = client.db(dbName);
 
   logger.debug("Initializing Apollo Middleware");
-  const resolvers: Resolvers = {
-    Query: {
-      getCollections,
-      getCollection,
-      getTask,
-    },
-    Mutation: {
-      createCollection,
-      createTask,
-      updateTask,
-      deleteTask,
-    },
-  };
   const server = new ApolloServer({
     typeDefs: typedefs,
     resolvers: resolvers,

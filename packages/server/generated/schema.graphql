@@ -25,7 +25,7 @@ input TaskUpdateInput {
 type Query {
     getCollection(name: String!): Collection
     getTask(collectionName: String!, taskId: String!): Task
-    getCollections: [String]
+    getCollections: [Collection]
 }
 
 type Mutation {

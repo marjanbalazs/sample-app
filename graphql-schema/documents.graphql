@@ -21,7 +21,10 @@ query getTask($collectionName: String!, $taskId: String!) {
 }
 
 query getCollections {
-    getCollections
+    getCollections {
+        id
+        name
+    }
 }
 
 mutation createCollection($collectionName: String!) {

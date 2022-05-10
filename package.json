@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "graphql-codegen --config codegen.yml && cp ./graphql-schema/schema.graphql ./packages/server/generated/schema.txt",
+    "compile": "graphql-codegen --config codegen.yml && cp ./graphql-schema/schema.graphql ./packages/server/generated/schema.graphql",
     "dev": "lerna run dev --stream",
     "build": "lerna run build",
     "type-check": "lerna run type-check --stream",

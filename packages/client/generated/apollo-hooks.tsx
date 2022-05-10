@@ -57,7 +57,7 @@ export type MutationUpdateTaskArgs = {
 export type Query = {
   __typename?: 'Query';
   getCollection?: Maybe<Collection>;
-  getCollections?: Maybe<Array<Maybe<Scalars['String']>>>;
+  getCollections?: Maybe<Array<Maybe<Collection>>>;
   getTask?: Maybe<Task>;
 };
 
@@ -109,7 +109,7 @@ export type GetTaskQuery = { __typename?: 'Query', getTask?: { __typename?: 'Tas
 export type GetCollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCollectionsQuery = { __typename?: 'Query', getCollections?: Array<string | null | undefined> | null | undefined };
+export type GetCollectionsQuery = { __typename?: 'Query', getCollections?: Array<{ __typename?: 'Collection', id: string, name: string } | null | undefined> | null | undefined };
 
 export type CreateCollectionMutationVariables = Exact<{
   collectionName: Scalars['String'];
@@ -227,7 +227,10 @@ export type GetTaskLazyQueryHookResult = ReturnType<typeof useGetTaskLazyQuery>;
 export type GetTaskQueryResult = Apollo.QueryResult<GetTaskQuery, GetTaskQueryVariables>;
 export const GetCollectionsDocument = gql`
     query getCollections {
-  getCollections
+  getCollections {
+    id
+    name
+  }
 }
     `;
 

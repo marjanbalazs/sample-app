@@ -4,6 +4,7 @@ import { Db, Document, ObjectId, WithId } from "mongodb";
 import {
   MutationResolvers,
   QueryResolvers,
+  Resolvers,
   Task,
 } from "./../generated/resolver-types";
 
@@ -30,11 +31,14 @@ export const getCollections: QueryResolvers<Context>["getCollections"] = async (
       .listCollections(
         {},
         {
-          nameOnly: true,
+          nameOnly: false,
         }
       )
       .toArray();
-    return collections.map((collection) => collection.name);
+    return collections.map((collection) => ({
+      id: collection.info?.uuid?.toString() as string,
+      name: collection.name,
+    }));
   } catch (e) {
     logger.error(e);
     throw e;
@@ -180,4 +184,27 @@ export const deleteTask: MutationResolvers<Context>["deleteTask"] = async (
     logger.error(e);
     throw e;
   }
+};
+
+export const resolvers: Resolvers<Context> = {
+  Collection: {
+    tasks: async (parent, args, context) => {
+      const { name } = parent;
+      const { db } = context;
+      return (await db.collection(name).find({}).toArray()).map(
+        mapDocumentToTask
+      );
+    },
+  },
+  Query: {
+    getCollections,
+    getCollection,
+    getTask,
+  },
+  Mutation: {
+    createCollection,
+    createTask,
+    updateTask,
+    deleteTask,
+  },
 };

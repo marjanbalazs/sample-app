@@ -56,7 +56,7 @@ export type MutationUpdateTaskArgs = {
 export type Query = {
   __typename?: 'Query';
   getCollection?: Maybe<Collection>;
-  getCollections?: Maybe<Array<Maybe<Scalars['String']>>>;
+  getCollections?: Maybe<Array<Maybe<Collection>>>;
   getTask?: Maybe<Task>;
 };
 
@@ -197,7 +197,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getCollection?: Resolver<Maybe<ResolversTypes['Collection']>, ParentType, ContextType, RequireFields<QueryGetCollectionArgs, 'name'>>;
-  getCollections?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  getCollections?: Resolver<Maybe<Array<Maybe<ResolversTypes['Collection']>>>, ParentType, ContextType>;
   getTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<QueryGetTaskArgs, 'collectionName' | 'taskId'>>;
 };
 
