@@ -6,14 +6,13 @@
   "scripts": {
     "dev": "esbuild src/app.tsx --servedir=dist --outdir=dist --bundle",
     "build": "node ./scripts/build.js",
-    "check-types": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "author": "",
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.3.0",
-    "sample-app-graphql-schema": "1.0.0",
     "@apollo/client": "3.4.16",
     "graphql": "^15.8.0"
   },

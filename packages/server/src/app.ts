@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import { Db, MongoClient } from "mongodb";
 import { ApolloServer } from "apollo-server-express";
-import { Resolvers } from "sample-app-graphql-schema/src/generated/resolver-types";
+import { Resolvers } from "./../generated/resolver-types";
 import {
   getCollections,
   getCollection,
@@ -11,12 +11,8 @@ import {
   updateTask,
   deleteTask,
 } from "./resolvers";
-import fs from "fs";
 import { logger } from "./utils";
-
-const typedefs = fs
-  .readFileSync("node_modules/sample-app-graphql-schema/src/schema.graphql")
-  .toString("utf-8");
+import typedefs from "../generated/schema.txt";
 
 // Connection URL
 const url = "mongodb://localhost:27017";

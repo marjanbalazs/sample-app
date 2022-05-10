@@ -8,6 +8,9 @@ esbuild
     entryPoints: ["./src/app.ts"],
     bundle: true,
     platform: "node",
+    loader: {
+      ".graphql": "file",
+    },
   })
   .then(() => console.log("Server built!"))
   .catch((e) => {

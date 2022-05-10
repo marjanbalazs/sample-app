@@ -1,8 +1,8 @@
 overwrite: true
-schema: "./src/schema.graphql"
-documents: "./src/documents.graphql"
+schema: "./graphql-schema/schema.graphql"
+documents: "./graphql-schema/documents.graphql"
 generates:
-  src/generated/apollo-hooks.tsx:
+  packages/client/generated/apollo-hooks.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"
@@ -11,7 +11,7 @@ generates:
       withHooks: true
       withHOC: false
       withComponent: false
-  src/generated/resolver-types.ts:
+  packages/server/generated/resolver-types.ts:
     plugins:
       - "typescript"
       - "typescript-resolvers"

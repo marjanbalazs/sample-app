@@ -5,7 +5,7 @@ import {
   MutationResolvers,
   QueryResolvers,
   Task,
-} from "sample-app-graphql-schema/src/generated/resolver-types";
+} from "./../generated/resolver-types";
 
 type Context = {
   db: Db;
