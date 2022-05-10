@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { Express } from "express";
 import { Db, MongoClient } from "mongodb";
 import { ApolloServer } from "apollo-server-express";
@@ -5,12 +6,13 @@ import { resolvers } from "./resolvers";
 import { logger } from "./utils";
 import typedefs from "../generated/schema.graphql";
 
-// Connection URL
-const url = "mongodb://localhost:27017";
-const client = new MongoClient(url);
+const mongoHost = process.env.MONGO_HOST as string;
+const mongoPort = process.env.MONGO_PORT as string;
+const mongoDBName = process.env.MONGO_DB_NAME as string;
 
-// Database Name
-const dbName = "myProject";
+// Connection URL
+const mongoURL = `mongodb://${mongoHost}:${mongoPort}`;
+const mongoClient = new MongoClient(mongoURL);
 
 const init = async (
   client: MongoClient,
@@ -22,7 +24,7 @@ const init = async (
 }> => {
   await client.connect();
   logger.debug("Connected successfully to server");
-  const db = client.db(dbName);
+  const db = client.db(mongoDBName);
 
   logger.debug("Initializing Apollo Middleware");
   const server = new ApolloServer({
@@ -30,7 +32,7 @@ const init = async (
     resolvers: resolvers,
     context: {
       db,
-      logger: logger,
+      logger,
     },
   });
   await server.start();
@@ -47,8 +49,8 @@ app.get("/hello", (req, res) => {
   res.status(200).send();
 });
 
-init(client, app)
-  .then(({ db, server, app }) => {
+init(mongoClient, app)
+  .then(({ server, app }) => {
     const middleware = server.getMiddleware({
       path: "/graphql",
     });

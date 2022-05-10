@@ -16,7 +16,8 @@
     "mongodb": "^4.5.0",
     "apollo-server-express": "^3.7.0",
     "graphql": "^15.8.0",
-    "log4js": "^6.4.6"
+    "log4js": "^6.4.6",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.22.0",
