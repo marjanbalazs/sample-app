@@ -329,8 +329,8 @@ const Collection: React.FC = () => {
               const lowerCasedSearchTerm = searchTerms.toLowerCase();
               return searchTerms
                 ? task.name.toLowerCase().includes(lowerCasedSearchTerm) ||
-                    task.tags?.some(
-                      (tag) => tag.toLowerCase() === lowerCasedSearchTerm
+                    task.tags?.some((tag) =>
+                      tag.toLowerCase().includes(lowerCasedSearchTerm)
                     )
                 : true;
             })
