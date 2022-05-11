@@ -165,12 +165,72 @@ const TaskEditMode: React.FC<{
   );
 };
 
+const TaskReadMode: React.FC<{
+  collectionName: string;
+  task: Task;
+  setMode: React.Dispatch<React.SetStateAction<TaskMode>>;
+}> = ({ collectionName, task: { id, name, complete, tags }, setMode }) => {
+  const [updateTask] = useUpdateTaskMutation();
+  return (
+    <>
+      <button
+        style={{ position: "absolute", top: "0.5rem", right: "0.5rem" }}
+        onClick={() => {
+          setMode("edit");
+        }}
+      >
+        Edit
+      </button>
+      <div style={{ marginBottom: "0.25rem" }}>{name}</div>
+      <div style={{ marginBottom: "0.25rem" }}>
+        Tags: {tags && tags.length > 0 ? tags?.join(", ") : "No tags"}
+      </div>
+      <div style={{ marginBottom: "0.25rem" }}>
+        Status: {complete ? "Done" : "In progress"}
+      </div>
+      {complete ? (
+        <button
+          onClick={() => {
+            void updateTask({
+              variables: {
+                collectionName,
+                taskId: id,
+                input: {
+                  complete: false,
+                },
+              },
+            });
+          }}
+        >
+          Mark uncomplete
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            void updateTask({
+              variables: {
+                collectionName,
+                taskId: id,
+                input: {
+                  complete: true,
+                },
+              },
+            });
+          }}
+        >
+          Mark Complete
+        </button>
+      )}
+    </>
+  );
+};
+
 const Task: React.FC<{ collectionName: string; task: Task }> = ({
   collectionName,
   task: { id, name, complete, tags },
 }) => {
   const [mode, setMode] = useState<TaskMode>("read");
-  const [updateTask] = useUpdateTaskMutation();
+
   return (
     <div
       style={{
@@ -187,56 +247,11 @@ const Task: React.FC<{ collectionName: string; task: Task }> = ({
       }}
     >
       {mode === "read" ? (
-        <>
-          <button
-            style={{ position: "absolute", top: "0.5rem", right: "0.5rem" }}
-            onClick={() => {
-              setMode("edit");
-            }}
-          >
-            Edit
-          </button>
-          <div style={{ marginBottom: "0.25rem" }}>{name}</div>
-          <div style={{ marginBottom: "0.25rem" }}>
-            Tags: {tags && tags.length > 0 ? tags?.join(", ") : "No tags"}
-          </div>
-          <div style={{ marginBottom: "0.25rem" }}>
-            Status: {complete ? "Done" : "In progress"}
-          </div>
-          {complete ? (
-            <button
-              onClick={() => {
-                void updateTask({
-                  variables: {
-                    collectionName,
-                    taskId: id,
-                    input: {
-                      complete: false,
-                    },
-                  },
-                });
-              }}
-            >
-              Mark uncomplete
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                void updateTask({
-                  variables: {
-                    collectionName,
-                    taskId: id,
-                    input: {
-                      complete: true,
-                    },
-                  },
-                });
-              }}
-            >
-              Mark Complete
-            </button>
-          )}
-        </>
+        <TaskReadMode
+          collectionName={collectionName}
+          task={{ id, name, complete, tags }}
+          setMode={setMode}
+        />
       ) : (
         <TaskEditMode
           collectionName={collectionName}
