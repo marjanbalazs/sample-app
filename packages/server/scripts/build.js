@@ -4,6 +4,7 @@ esbuild
   .build({
     treeShaking: true,
     minify: true,
+    target: ["node16.15.0"],
     outdir: "./dist",
     entryPoints: ["./src/app.ts"],
     bundle: true,
