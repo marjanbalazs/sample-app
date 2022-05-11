@@ -2,6 +2,7 @@
 
 ### Install
 ```
+nvm use
 npm install
 npx lerna bootstrap
 ```
